@@ -71,7 +71,7 @@ class Alal:
         return "&".join([f"{k}={v}" for k, v in kwargs.items()])
 
 
-    def webhook_authenication(request):
+    def webhook_authentification(request):
         """Validate signed requests."""
         api_signature = request.headers.get("x-alal-signature")
         secret = os.environ.get("")
