@@ -1,4 +1,4 @@
-class CardUser: 
+class CardUsers: 
     def __init__(self, address, created_at, email, first_name, last_name, id_no, phone, reference, status ) -> None:
         self.address = address
         self.created_at = created_at, 
