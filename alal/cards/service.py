@@ -44,7 +44,7 @@ class Card(Alal):
             url_params = pagination_filter(kwargs=kwargs)
         response = self.sendRequest("GET", f"cards/?{url_params}")
         data = response["data"]
-        return [self.__generate_user_object(card_data) for card_data in data]
+        return [self.__generate_card_object(card_data) for card_data in data]
     
     def showCard(self, reference):
         """
