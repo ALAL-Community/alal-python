@@ -52,7 +52,7 @@ class Dispute(Alal):
             show disputes details
             GET request
         """
-        response = self.sendRequest("GET", f"disputes/?{reference}")
+        response = self.sendRequest("GET", f"disputes/{reference}")
         return self.__generate_dispute_object(data=response.get("data"))
     
     def updateDispute(self, body, reference):

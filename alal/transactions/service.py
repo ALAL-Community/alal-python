@@ -24,12 +24,12 @@ class Transaction(Alal):
             body = {
                 "action" = "recharge",
                 "amount" = "2000"
-                cardReference = "9c54515e-7890-44f9-8cc2-a85b80322b98"
+                card_reference = "9c54515e-7890-44f9-8cc2-a85b80322b98"
             }
             POST request
         """
 
-        required_data = ["action", "amount", "cardReference"]
+        required_data = ["action", "amount", "card_reference"]
         self.checkRequiredData(required_data, body)
 
         response = self.sendRequest("POST", "transactions/create", json=body)
@@ -46,4 +46,12 @@ class Transaction(Alal):
             url_params = pagination_filter(kwargs=kwargs)
         response = self.sendRequest("GET", f"transactions/?{url_params}")
         data = response["data"]
-        return [self.__generate_transaction_object(transaction_data) for transaction_data in data]  
+        return [self.__generate_transaction_object(transaction_data) for transaction_data in data]
+
+    def showCard(self, reference):
+        """
+            show transaction details
+            GET request
+        """
+        response = self.sendRequest("GET", f"transactions/{reference}")
+        return self.__generate_card_object(data=response.get("data"))

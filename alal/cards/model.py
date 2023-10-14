@@ -1,12 +1,8 @@
-class Card: 
-    def __init__(self, balance, cardBrand, cardType, last_four, reference, status ) -> None:
+class Card:
+    def __init__(self, balance, card_brand, card_type, last_four, reference, status) -> None:
         self.balance = balance
-        self.cardBrand = cardBrand, 
-        self.cardType  = cardType,
+        self.card_brand = card_brand,
+        self.card_type = card_type,
         self.last_four = last_four,
         self.reference = reference
         self.status = status
-        
-
-    
-

@@ -60,6 +60,6 @@ class CardUser(Alal):
             show card user details
             GET request
         """
-        response = self.sendRequest("GET", f"card-users/?{reference}")
+        response = self.sendRequest("GET", f"card-users/{reference}")
         return self.__generate_cardUser_object(data=response.get("data"))
     
