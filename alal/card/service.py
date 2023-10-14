@@ -4,7 +4,7 @@ from .model import Card
 
 class Card(Alal):
     """
-        Cards class
+        Card class
     """
 
     def __generate_card_object(self, data):
@@ -17,7 +17,7 @@ class Card(Alal):
             status=data["status"],
         )
 
-    def createCard(self, body: dict):
+    def create_card(self, body: dict):
         """
             create card on alal platform
             body = {
@@ -34,7 +34,7 @@ class Card(Alal):
         response = self.sendRequest("POST", "cards/create", json=body)
         return self.__generate_card_object(data=response.get("data"))
 
-    def listCard(self, **kwargs):
+    def list_card(self, **kwargs):
         """
             list all cards 
             GET request
@@ -46,7 +46,7 @@ class Card(Alal):
         data = response["data"]
         return [self.__generate_card_object(card_data) for card_data in data]
 
-    def showCard(self, reference):
+    def show_card(self, reference):
         """
             show card details
             GET request
@@ -54,7 +54,7 @@ class Card(Alal):
         response = self.sendRequest("GET", f"cards/{reference}")
         return self.__generate_card_object(data=response.get("data"))
 
-    def freezeCard(self, reference):
+    def freeze_card(self, reference):
         """
             freeze card
              body = {
@@ -69,7 +69,7 @@ class Card(Alal):
         response = self.send_request("POST", "cards/freeze", json=body)
         return self.__generate_card_object(data=response["data"])
 
-    def unfreezeCard(self, reference):
+    def unfreeze_card(self, reference):
         """
             unfreeze card
              body = {
@@ -84,7 +84,7 @@ class Card(Alal):
         response = self.send_request("POST", "cards/unfreeze", json=body)
         return self.__generate_card_object(data=response["data"])
 
-    def linkCard(self, body):
+    def link_card(self, body):
         """
             unfreeze card
              body = {
@@ -98,7 +98,7 @@ class Card(Alal):
         response = self.send_request("POST", "cards/link", json=body)
         return self.__generate_card_object(data=response["data"])
 
-    def getAccessToken(self, body):
+    def get_access_token(self, body):
         """
             create card access token 
             body = {

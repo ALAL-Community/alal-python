@@ -16,7 +16,7 @@ class Dispute(Alal):
         )
     
 
-    def createDispute(self, body):
+    def create_dispute(self, body):
         """
             create dispute on alal platform 
             body = {
@@ -34,7 +34,7 @@ class Dispute(Alal):
         response = self.sendRequest("POST", "disputes/create", json=body)
         return self.__generate_dispute_objects(data=response.get("data"))
     
-    def listDispute(self, **kwargs): 
+    def list_dispute(self, **kwargs): 
         """
             list all disputes
             GET request
@@ -47,7 +47,7 @@ class Dispute(Alal):
         return [self.__generate_dispute_object(dispute_data) for dispute_data in data] 
     
 
-    def showCardUser(self, reference):
+    def show_card_user(self, reference):
         """
             show disputes details
             GET request
@@ -55,7 +55,7 @@ class Dispute(Alal):
         response = self.sendRequest("GET", f"disputes/{reference}")
         return self.__generate_dispute_object(data=response.get("data"))
     
-    def updateDispute(self, body, reference):
+    def update_dispute(self, body, reference):
         """
             update dispute on alal platform 
             body = {

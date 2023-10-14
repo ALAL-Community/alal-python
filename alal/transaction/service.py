@@ -18,7 +18,7 @@ class Transaction(Alal):
             slug= data["slug"]
         )
 
-    def createTransaction(self, body):
+    def create_transaction(self, body):
         """
             create card transaction 
             body = {
@@ -36,7 +36,7 @@ class Transaction(Alal):
         return self.__generate_transaction_objects(data=response.get("data"))
     
 
-    def listTransaction(self, **kwargs):
+    def list_transaction(self, **kwargs):
         """
             list all card transaction
             GET request
@@ -48,7 +48,7 @@ class Transaction(Alal):
         data = response["data"]
         return [self.__generate_transaction_object(transaction_data) for transaction_data in data]
 
-    def showCard(self, reference):
+    def show_card(self, reference):
         """
             show transaction details
             GET request

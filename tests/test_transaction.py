@@ -1,6 +1,6 @@
 import unittest
 from unittest.mock import MagicMock
-from alal.transactions.service import Transaction
+from alal.transaction.service import Transaction
 
 class TestCard(unittest.TestCase):
     """

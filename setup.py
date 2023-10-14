@@ -13,7 +13,7 @@ setup(
     long_description_content_type="text/markdown",
     url="https://github.com/ALAL-Community/alal-python",
     author="Alal", 
-    author_email="contact@saalal.com", 
+    author_email="info@saalal.com",
     license="MIT", 
     classifiers=[
         "License :: OSI Approved :: MIT License",

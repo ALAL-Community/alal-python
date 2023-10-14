@@ -20,7 +20,7 @@ class CardUser(Alal):
         )
 
     
-    def createCardUser(self, body): 
+    def create_card_user(self, body): 
         """
             create card user on alal platform 
             body = {
@@ -43,7 +43,7 @@ class CardUser(Alal):
         return self.__generate_cardUser_object(data=response.get("data"))
     
 
-    def listCardUser(self, **kwargs): 
+    def list_card_user(self, **kwargs): 
         """
             list all card user
             GET request
@@ -55,7 +55,7 @@ class CardUser(Alal):
         data = response["data"]
         return [self.__generate_cardUser_object(cardUser_data) for cardUser_data in data]   
     
-    def showCardUser(self, reference):
+    def show_card_user(self, reference):
         """
             show card user details
             GET request

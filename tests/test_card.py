@@ -1,6 +1,6 @@
 import unittest
 from unittest.mock import MagicMock
-from alal.cards.model import Card
+from alal.card.model import Card
 
 class TestCard(unittest.TestCase):
     """
