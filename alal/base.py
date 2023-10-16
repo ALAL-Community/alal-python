@@ -14,10 +14,10 @@ class Alal:
     """
 
     def __init__(self):
-        self.Alal_LIVE_URL = 'https://api.saalal.com/v1'
-        self.Alal_SANDBOX_URL = 'https://api.sandbox.saalal.com/v1'
+        self.Alal_LIVE_URL = 'https://api.saalal.com/v1/'
+        self.Alal_SANDBOX_URL = 'https://api.sandbox.saalal.com/v1/'
         self.api_key = os.environ.get('ALAL_API_KEY')
-        self.production = os.environ.get('Production')
+        self.production = os.environ.get('ALAL_PRODUCTION')
 
         if self.api_key is None:
             raise AlalUnauthorized()
@@ -27,7 +27,7 @@ class Alal:
         self.base_url = os.environ.get("ALAL_BASE_URL") or backupUrl
         setattr(self, "base_url", self.base_url)
 
-    def sendRequest(self, method, path, **kwargs):
+    def send_request(self, method, path, **kwargs):
         """
         Create a request for alal 
         return data
@@ -49,6 +49,7 @@ class Alal:
         try:
             response = options[method](url, headers=headers, **kwargs)
             data = response.json()
+            print(data)
             try:
                 data["statusCode"]
                 exception = exception_class.get(data["statusCode"])
@@ -58,7 +59,7 @@ class Alal:
         except (HTTPError, ConnectionError) as e:
             return e
 
-    def checkRequiredData(self, required_data, passed_param):
+    def check_required_data(self, required_data, passed_param):
         """
         function to check required param
 
@@ -70,14 +71,16 @@ class Alal:
                 message = f'{key} is required! ' + added_message
                 raise AlalBadRequest(message)
 
-    def pagination_filter(**kwargs):
-        return "&".join([f"{k}={v}" for k, v in kwargs.items()])
 
-    def webhook_authentification(request):
-        """Validate signed requests."""
-        api_signature = request.headers.get("x-alal-signature")
-        secret = os.environ.get("")
-        computed_sig = hmac.new(
-            key=secret.encode("utf-8"), msg=request.body, digestmod=sha512
-        ).hexdigest()
-        return computed_sig == api_signature
+def pagination_filter(**kwargs):
+    return "&".join([f"{k}={v}" for k, v in kwargs.items()])
+
+
+def webhook_authentification(request):
+    """Validate signed requests."""
+    api_signature = request.headers.get("x-alal-signature")
+    secret = os.environ.get("")
+    computed_sig = hmac.new(
+        key=secret.encode("utf-8"), msg=request.body, digestmod=sha512
+    ).hexdigest()
+    return computed_sig == api_signature

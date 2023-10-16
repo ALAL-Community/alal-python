@@ -1,5 +1,6 @@
 from alal.base import Alal, pagination_filter
-from .model import Disputes
+from .model import Dispute
+
 
 class Dispute(Alal):
     """
@@ -7,14 +8,13 @@ class Dispute(Alal):
     """
 
     def __generate_dispute_objects(self, data):
-        return Disputes(
-            explanation= data["explanation"], 
-            reason= data["reason"],
-            reference= data["reference"], 
-            status= data["status"],
-            transaction_reference= data["transaction_reference"]
+        return Dispute(
+            explanation=data["explanation"],
+            reason=data["reason"],
+            reference=data["reference"],
+            status=data["status"],
+            transaction_reference=data["transaction_reference"]
         )
-    
 
     def create_dispute(self, body):
         """
@@ -29,12 +29,12 @@ class Dispute(Alal):
         """
 
         required_data = ["explanation", "reason", "transaction_reference"]
-        self.checkRequiredData(required_data, body)
+        self.check_required_data(required_data, body)
 
-        response = self.sendRequest("POST", "disputes/create", json=body)
+        response = self.send_request("POST", "disputes/create", json=body)
         return self.__generate_dispute_objects(data=response.get("data"))
-    
-    def list_dispute(self, **kwargs): 
+
+    def list_dispute(self, **kwargs):
         """
             list all disputes
             GET request
@@ -42,19 +42,18 @@ class Dispute(Alal):
         url_params = None
         if kwargs != {}:
             url_params = pagination_filter(kwargs=kwargs)
-        response = self.sendRequest("GET", f"disputes/?{url_params}")
+        response = self.send_request("GET", f"disputes/?{url_params}")
         data = response["data"]
-        return [self.__generate_dispute_object(dispute_data) for dispute_data in data] 
-    
+        return [self.__generate_dispute_object(dispute_data) for dispute_data in data]
 
     def show_card_user(self, reference):
         """
             show disputes details
             GET request
         """
-        response = self.sendRequest("GET", f"disputes/{reference}")
+        response = self.send_request("GET", f"disputes/{reference}")
         return self.__generate_dispute_object(data=response.get("data"))
-    
+
     def update_dispute(self, body, reference):
         """
             update dispute on alal platform 
@@ -68,7 +67,8 @@ class Dispute(Alal):
         """
 
         required_data = ["explanation", "reason", "transaction_reference"]
-        self.checkRequiredData(required_data, body)
+        self.check_required_data(required_data, body)
 
-        response = self.sendRequest("POST", f"disputes/update/{reference}", json=body)
+        response = self.send_request(
+            "POST", f"disputes/update/{reference}", json=body)
         return self.__generate_dispute_objects(data=response.get("data"))

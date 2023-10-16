@@ -14,6 +14,7 @@ class Card(Alal):
             card_brand=data["card_brand"],
             last_four=data["last_four"],
             reference=data["reference"],
+            card_user_reference=data["card_user_reference"],
             status=data["status"],
         )
 
@@ -29,10 +30,10 @@ class Card(Alal):
             POST request 
         """
         required_data = ["card_type", "card_brand", "card_user_reference"]
-        self.checkRequiredData(required_data, body)
+        self.check_required_data(required_data, body)
 
-        response = self.sendRequest("POST", "cards/create", json=body)
-        return self.__generate_card_object(data=response.get("data"))
+        response = self.send_request("POST", "cards/create", json=body)
+        return self.__generate_card_object(data=response.get("data", {}).get("card"))
 
     def list_card(self, **kwargs):
         """
@@ -42,7 +43,7 @@ class Card(Alal):
         url_params = None
         if kwargs != {}:
             url_params = pagination_filter(kwargs=kwargs)
-        response = self.sendRequest("GET", f"cards/?{url_params}")
+        response = self.send_request("GET", f"cards/?{url_params}")
         data = response["data"]
         return [self.__generate_card_object(card_data) for card_data in data]
 
@@ -51,8 +52,9 @@ class Card(Alal):
             show card details
             GET request
         """
-        response = self.sendRequest("GET", f"cards/{reference}")
-        return self.__generate_card_object(data=response.get("data"))
+        response = self.send_request("GET", f"cards/{reference}")
+        print(response.get("data", {}))
+        return self.__generate_card_object(data=response.get("data", {}).get("card"))
 
     def freeze_card(self, reference):
         """
@@ -67,7 +69,7 @@ class Card(Alal):
         }
 
         response = self.send_request("POST", "cards/freeze", json=body)
-        return self.__generate_card_object(data=response["data"])
+        return self.__generate_card_object(data=response.get("data", {}).get("card"))
 
     def unfreeze_card(self, reference):
         """
@@ -82,7 +84,7 @@ class Card(Alal):
         }
 
         response = self.send_request("POST", "cards/unfreeze", json=body)
-        return self.__generate_card_object(data=response["data"])
+        return self.__generate_card_object(data=response.get("data", {}).get("card"))
 
     def link_card(self, body):
         """
@@ -93,10 +95,10 @@ class Card(Alal):
             POST request
         """
         required_data = ["reference", "card_user_reference"]
-        self.checkRequiredData(required_data, body)
+        self.check_required_data(required_data, body)
 
         response = self.send_request("POST", "cards/link", json=body)
-        return self.__generate_card_object(data=response["data"])
+        return self.__generate_card_object(data=response.get("data", {}).get("card"))
 
     def get_access_token(self, body):
         """
@@ -108,8 +110,8 @@ class Card(Alal):
             POST request
         """
         required_data = ["css_url", "reference"]
-        self.checkRequiredData(required_data, body)
+        self.check_required_data(required_data, body)
 
-        response = self.sendRequest(
+        response = self.send_request(
             "POST", "cards/auth/acess_token", json=body)
         return response.get("data")

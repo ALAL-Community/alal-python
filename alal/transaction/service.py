@@ -1,21 +1,22 @@
 from alal.base import Alal, pagination_filter
-from .model import Transactions
+from .model import Transaction
 
-class Transaction(Alal): 
+
+class Transaction(Alal):
     """
         transaction class
     """
 
     def __generate_transaction_objects(self, data):
-        return Transactions(
-            amount= data["amount"], 
-            card_reference= data["card_reference"], 
-            created_at= data["created_at"], 
-            kind= ["kind"], 
-            merchant= ["merchant"], 
-            reference= data["reference"],
-            status= data["status"],
-            slug= data["slug"]
+        return Transaction(
+            amount=data["amount"],
+            card_reference=data["card_reference"],
+            created_at=data["created_at"],
+            kind=["kind"],
+            merchant=["merchant"],
+            reference=data["reference"],
+            status=data["status"],
+            slug=data["slug"]
         )
 
     def create_transaction(self, body):
@@ -30,11 +31,10 @@ class Transaction(Alal):
         """
 
         required_data = ["action", "amount", "card_reference"]
-        self.checkRequiredData(required_data, body)
+        self.check_required_data(required_data, body)
 
-        response = self.sendRequest("POST", "transactions/create", json=body)
+        response = self.send_request("POST", "transactions/create", json=body)
         return self.__generate_transaction_objects(data=response.get("data"))
-    
 
     def list_transaction(self, **kwargs):
         """
@@ -44,7 +44,7 @@ class Transaction(Alal):
         url_params = None
         if kwargs != {}:
             url_params = pagination_filter(kwargs=kwargs)
-        response = self.sendRequest("GET", f"transactions/?{url_params}")
+        response = self.send_request("GET", f"transactions/?{url_params}")
         data = response["data"]
         return [self.__generate_transaction_object(transaction_data) for transaction_data in data]
 
@@ -53,5 +53,5 @@ class Transaction(Alal):
             show transaction details
             GET request
         """
-        response = self.sendRequest("GET", f"transactions/{reference}")
+        response = self.send_request("GET", f"transactions/{reference}")
         return self.__generate_card_object(data=response.get("data"))
