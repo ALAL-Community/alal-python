@@ -2,7 +2,7 @@ from alal.base import Alal, pagination_filter
 from .model import Dispute
 
 
-class Dispute(Alal):
+class DisputeService(Alal):
     """
         Dispute class
     """
@@ -41,8 +41,8 @@ class Dispute(Alal):
         """
         url_params = None
         if kwargs != {}:
-            url_params = pagination_filter(kwargs=kwargs)
-        response = self.send_request("GET", f"disputes/?{url_params}")
+            url_params = pagination_filter(**kwargs)
+        response = self.send_request("GET", f"disputes?{url_params}")
         data = response["data"]
         return [self.__generate_dispute_object(dispute_data) for dispute_data in data]
 

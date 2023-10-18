@@ -2,7 +2,7 @@ from alal.base import Alal, pagination_filter
 from .model import Card
 
 
-class Card(Alal):
+class CardService(Alal):
     """
         Card class
     """
@@ -42,8 +42,8 @@ class Card(Alal):
         """
         url_params = None
         if kwargs != {}:
-            url_params = pagination_filter(kwargs=kwargs)
-        response = self.send_request("GET", f"cards/?{url_params}")
+            url_params = pagination_filter(**kwargs)
+        response = self.send_request("GET", f"cards?{url_params}")
         data = response["data"]
         return [self.__generate_card_object(card_data) for card_data in data]
 
@@ -53,7 +53,6 @@ class Card(Alal):
             GET request
         """
         response = self.send_request("GET", f"cards/{reference}")
-        print(response.get("data", {}))
         return self.__generate_card_object(data=response.get("data", {}).get("card"))
 
     def freeze_card(self, reference):

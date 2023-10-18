@@ -14,15 +14,17 @@ class Alal:
     """
 
     def __init__(self):
-        self.Alal_LIVE_URL = 'https://api.saalal.com/v1/'
-        self.Alal_SANDBOX_URL = 'https://api.sandbox.saalal.com/v1/'
+        self.ALAL_LIVE_URL = 'https://api.saalal.com/v1/'
+        self.ALAL_SANDBOX_URL = 'https://api.sandbox.saalal.com/v1/'
         self.api_key = os.environ.get('ALAL_API_KEY')
-        self.production = os.environ.get('ALAL_PRODUCTION')
+        self.production = os.environ.get('ALAL_PRODUCTION', "False")
 
         if self.api_key is None:
-            raise AlalUnauthorized()
+            raise AlalUnauthorized(
+                'Missing ALAL_API_KEY. Please get API KEY from dashboard')
         backupUrl = (
-            self.Alal_SANDBOX_URL if self.production.lower() is False else self.Alal_LIVE_URL
+            self.ALAL_SANDBOX_URL if self.production.lower() in (
+                'False', '0', 'false', 'f') else self.ALAL_LIVE_URL
         )
         self.base_url = os.environ.get("ALAL_BASE_URL") or backupUrl
         setattr(self, "base_url", self.base_url)
@@ -43,17 +45,19 @@ class Alal:
         }
         url = "{}{}".format(self.base_url, path)
         headers = {
-            "content-type": "application/json",
+            "Accept": "application/json",
             "Authorization": "Bearer {}".format(self.api_key),
         }
         try:
             response = options[method](url, headers=headers, **kwargs)
             data = response.json()
+            print(url)
             print(data)
             try:
-                data["statusCode"]
-                exception = exception_class.get(data["statusCode"])
-                raise exception(data["message"])
+                exception = exception_class.get(response.status_code)
+                if exception is not None:
+                    raise exception(data["message"])
+                return data
             except KeyError:
                 return data
         except (HTTPError, ConnectionError) as e:

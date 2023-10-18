@@ -2,7 +2,7 @@ from alal.base import Alal, pagination_filter
 from .model import Transaction
 
 
-class Transaction(Alal):
+class TransactionService(Alal):
     """
         transaction class
     """
@@ -43,8 +43,8 @@ class Transaction(Alal):
         """
         url_params = None
         if kwargs != {}:
-            url_params = pagination_filter(kwargs=kwargs)
-        response = self.send_request("GET", f"transactions/?{url_params}")
+            url_params = pagination_filter(**kwargs)
+        response = self.send_request("GET", f"transactions?{url_params}")
         data = response["data"]
         return [self.__generate_transaction_object(transaction_data) for transaction_data in data]
 

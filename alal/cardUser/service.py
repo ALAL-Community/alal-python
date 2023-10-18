@@ -2,7 +2,7 @@ from alal.base import Alal, pagination_filter
 from .model import CardUser
 
 
-class CardUser(Alal):
+class CardUserService(Alal):
     """
         CardUser class
     """
@@ -50,8 +50,8 @@ class CardUser(Alal):
         """
         url_params = None
         if kwargs != {}:
-            url_params = pagination_filter(kwargs=kwargs)
-        response = self.send_request("GET", f"card-users/?{url_params}")
+            url_params = pagination_filter(**kwargs)
+        response = self.send_request("GET", f"card-users?{url_params}")
         data = response["data"]
         return [self.__generate_cardUser_object(cardUser_data) for cardUser_data in data]
 
