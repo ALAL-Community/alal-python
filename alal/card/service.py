@@ -16,6 +16,7 @@ class CardService(Alal):
             reference=data["reference"],
             card_user_reference=data["card_user_reference"],
             status=data["status"],
+            created_at=data["created_at"]
         )
 
     def create_card(self, body: dict):

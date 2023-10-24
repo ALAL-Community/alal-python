@@ -46,7 +46,7 @@ class DisputeService(Alal):
         data = response["data"]
         return [self.__generate_dispute_object(dispute_data) for dispute_data in data]
 
-    def show_card_user(self, reference):
+    def show_dispute(self, reference):
         """
             show disputes details
             GET request

@@ -61,4 +61,4 @@ class CardUserService(Alal):
             GET request
         """
         response = self.send_request("GET", f"card-users/{reference}")
-        return self.__generate_cardUser_object(data=response.get("data"))
+        return self.__generate_cardUser_object(data=response.get("data", {}).get("cardUser"))

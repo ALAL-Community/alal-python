@@ -48,7 +48,7 @@ class TransactionService(Alal):
         data = response["data"]
         return [self.__generate_transaction_object(transaction_data) for transaction_data in data]
 
-    def show_card(self, reference):
+    def show_transaction(self, reference):
         """
             show transaction details
             GET request
