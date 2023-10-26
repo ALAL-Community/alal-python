@@ -7,13 +7,13 @@ class TransactionService(Alal):
         transaction class
     """
 
-    def __generate_transaction_objects(self, data):
+    def __generate_transaction_object(self, data):
         return Transaction(
             amount=data["amount"],
             card_reference=data["card_reference"],
             created_at=data["created_at"],
-            kind=["kind"],
-            merchant=["merchant"],
+            kind=data["kind"],
+            merchant=data["merchant"],
             reference=data["reference"],
             status=data["status"],
             slug=data["slug"]
@@ -34,7 +34,7 @@ class TransactionService(Alal):
         self.check_required_data(required_data, body)
 
         response = self.send_request("POST", "transactions/create", json=body)
-        return self.__generate_transaction_objects(data=response.get("data"))
+        return self.__generate_transaction_object(data=response.get("data", {}).get("transaction"))
 
     def list_transaction(self, **kwargs):
         """
@@ -54,4 +54,4 @@ class TransactionService(Alal):
             GET request
         """
         response = self.send_request("GET", f"transactions/{reference}")
-        return self.__generate_card_object(data=response.get("data"))
+        return self.__generate_transaction_object(data=response.get("data", {}).get("transaction"))

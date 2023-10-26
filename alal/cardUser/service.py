@@ -29,10 +29,10 @@ class CardUserService(Alal):
                     "first_name": "ndeye ngone",
                     "id_no": "20119991010000621",
                     "last_name": "ndiaye",
-                    "phone": "774964996",
-                    "reference": "88c2f29c-2fba-40f1-a303-b33008e42fe9", 
+                    "phone": "774964996", 
                     "id_image": "image.jpeg", 
-                    "selfie_image": "selfie.jpeg"
+                    "selfie_image": "selfie.jpeg",
+                    "back_id_image": "back.jpeg"
             }
             POST request
         """
@@ -40,8 +40,8 @@ class CardUserService(Alal):
                          "last_name", "id_image", "id_no", "phone", "selfie_image"]
         self.check_required_data(required_data, body)
 
-        response = self.send_request("POST", "crad-users/create", json=body)
-        return self.__generate_cardUser_object(data=response.get("data"))
+        response = self.send_request("POST", "card-users/create", json=body)
+        return self.__generate_cardUser_object(data=response.get("data", {}).get("cardUser"))
 
     def list_card_user(self, **kwargs):
         """

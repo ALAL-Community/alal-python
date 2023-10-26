@@ -7,7 +7,7 @@ class DisputeService(Alal):
         Dispute class
     """
 
-    def __generate_dispute_objects(self, data):
+    def __generate_dispute_object(self, data):
         return Dispute(
             explanation=data["explanation"],
             reason=data["reason"],
@@ -32,7 +32,7 @@ class DisputeService(Alal):
         self.check_required_data(required_data, body)
 
         response = self.send_request("POST", "disputes/create", json=body)
-        return self.__generate_dispute_objects(data=response.get("data"))
+        return self.__generate_dispute_object(data=response.get("data", {}).get("dispute"))
 
     def list_dispute(self, **kwargs):
         """
@@ -52,7 +52,7 @@ class DisputeService(Alal):
             GET request
         """
         response = self.send_request("GET", f"disputes/{reference}")
-        return self.__generate_dispute_object(data=response.get("data"))
+        return self.__generate_dispute_object(data=response.get("data", {}).get("dispute"))
 
     def update_dispute(self, body, reference):
         """
@@ -71,4 +71,4 @@ class DisputeService(Alal):
 
         response = self.send_request(
             "POST", f"disputes/update/{reference}", json=body)
-        return self.__generate_dispute_objects(data=response.get("data"))
+        return self.__generate_dispute_object(data=response.get("data", {}).get("dispute"))

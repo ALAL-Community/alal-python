@@ -23,7 +23,7 @@ class CardService(Alal):
         """
             create card on alal platform
             body = {
-                "card_brand": "Visa",
+                "card_brand": "visa",
                 "card_type": "virtual",
                 "card_user_reference": "d282e4a6-1fb6-4827-a6ae-a780263287d7",
             }
@@ -91,6 +91,7 @@ class CardService(Alal):
             unfreeze card
              body = {
                 reference = "d282e4a6-1fb6-4827-a6ae-a780263287d7"
+                card_user_reference = "577f7a27-0749-4c7c-89a3-bcedca3452e9"
             }
             POST request
         """
@@ -109,9 +110,9 @@ class CardService(Alal):
             }
             POST request
         """
-        required_data = ["css_url", "reference"]
+        required_data = ["reference"]
         self.check_required_data(required_data, body)
 
         response = self.send_request(
-            "POST", "cards/auth/acess_token", json=body)
+            "POST", "cards/auth/access_token", json=body)
         return response.get("data")
