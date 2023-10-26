@@ -1,141 +1,196 @@
 # Alal
+
 ---
+
 A PHP sdk to interact with Alal's API
 
 ## Getting started
 
 ### Requirements
+
 This package requires Python 3.6+
 
-### Installation 
+### Installation
+
 - `pip install alal-python`
 
 ### Usage
-This SDK can be used both for Alal Sandbox and Production API. 
+
+This SDK can be used both for Alal Sandbox and Production API.
+
 ### Setting ENV KEYS
+
 For sucessfully running of the SDK; the `Alal_API_KEY` must be set.
 
 Now this will throw a `AlalBadKeyError` error, if you do not set it as an environment variable, when initiatizing a function.
 
-By default the SDK assumes that you are currently working on production, and your `Alal_API_KEY` must be a production-grade secret key. 
+By default the SDK assumes that you are currently working on production, and your `Alal_API_KEY` must be a production-grade secret key.
 
-To run on sandbox(development mode), set `Alal_PRODUCTION=false` as an environment variable.
+To run on sandbox(development mode), set `Alal_PRODUCTION="false"` as an environment variable.
 
-<!-- ### Instantiate The Bitnob Functions
-Before making use of any bitnob functions, it should be instantiated. Below is a demonstration:
-
-> from bitnob import Lightning
-
-> lightning = Lightning()
-
-- `customer = Customer()`
-- `onchain = Onchain()`
-- `wallet = Wallets()`
-
-
-#### Customers
-
-- To manage customers in your application, instantiate a new `Customer` class.
-    - The following functions are available:
-        - create_customer
-        - get_customer_by_email 
-        - get_customer 
-        - update_customer
-
-### Lightning
-- To create Lightning Transactions, instantiate a new `Lightning` class.
-    - The following functions are available:
-        - create_invoice
-        - pay_invoice 
-        - initiate_payment
-        - decode_payment_request 
-        - get_invoice
-
-
-#### Full Lightning Workflow 
-```python
-    from bitnob import Lightning
-
-    lightning = Lightning()
-
-    payload = {
-        "customerEmail": "bernard@bitnob.com",
-        "description": "Enjoy Life!",
-        "tokens": 300,
-        "expires_at": "24h",
-        "private": false,
-        "is_including_private_channels": false,
-        "is_fallback_included": true,
-    }
-
-    # Create a lightning invoice 
-
-   new_ln_invoice = lightning.create_invoice(payload)
-    
-```
-### Onchain 
-- To create Onchain Transactions, instantiate a new `Onchain` class.
-    - The following functions are available:
-        - send_bitcoin
-        - generate_address
-        - list_addresses
-
-
-#### Full Onchain Transaction Workflow
+## Example
 
 ```python
+from alal import (
+    CardService,
+    CardUserService,
+    TransactionService,
+    DisputeService
+)
+import os
 
-    from bitnob import Onchain
+os.environ['ALAL_API_KEY'] = 'RCIWTSqXa.........NXCcOEUJJ1R'
+os.environ['ALAL_PRODUCTION'] = "false"
 
-    on_chain = Onchain()
 
-    payload = {
-        "customerEmail": "bernard@bitnob.com",
-        "reference": "txt-ref-09fdcsf-7658dcgfh-84738pokli",
-        "satoshis": 30000,
-        "address": "btcjshlidlsidskdslisidsdosilsdmxksjsjldksossjoioidjifkji.zjijsi",
-        "description": "Go buy your momma a house!",
-        "priorityLevel": "priority"
-    }
+# Helpers used just for example
 
-    # Send bitcoin using onchain 
+def card_printer(card):
+    print(card.balance)
+    print(card.last_four)
+    print(card.reference)
+    print(card.card_brand)
+    print(card.card_type)
+    print(card.card_user_reference)
+    print(card.status)
 
-    new_onchain = on_chain.send_bitcoin(payload)
+
+def card_user_printer(card_user):
+    print(card_user.address)
+    print(card_user.created_at)
+    print(card_user.email)
+    print(card_user.first_name)
+    print(card_user.last_name)
+    print(card_user.id_no)
+    print(card_user.phone)
+    print(card_user.reference)
+    print(card_user.status)
+
+
+def transaction_printer(transaction):
+    print(transaction.amount)
+    print(transaction.card_reference)
+    print(transaction.created_at)
+    print(transaction.kind)
+    print(transaction.merchant)
+    print(transaction.reference)
+    print(transaction.status)
+    print(transaction.slug)
+
+
+def dispute_printer(dispute):
+    print(dispute.explanation)
+    print(dispute.reason)
+    print(dispute.reference)
+    print(dispute.kind)
+    print(dispute.status)
+    print(dispute.transaction_reference)
+
+
+# Initiate CardService, CardService allow you to interact with cards
+card_service = CardService()
+
+# Show Card
+card = card_service.show_card("7cf32da1-6ef2-4d96-bd09-0a527541bef4")
+
+card_printer(card)
+
+# Get Access Token
+access_data = card_service.get_access_token(
+    {'reference': '7cf32da1-6ef2-4d96-bd09-0a527541bef4'})
+
+print(access_data)
+print(access_data['access_token'])
+print(access_data['embedded_ui'])
+
+# Freeze Card
+card = card_service.freeze_card('7cf32da1-6ef2-4d96-bd09-0a527541bef4')
+card_printer(card)
+
+# Unfreeze Card
+card = card_service.unfreeze_card('7cf32da1-6ef2-4d96-bd09-0a527541bef4')
+card_printer(card)
+
+# List Cards
+cards = card_service.list_card(page=3, per_page=5)
+
+for card in cards:
+    card_printer(card)
+
+# Create Card
+
+card = card_service.create_card({
+    'card_brand': 'visa',
+    'card_type': 'virtual',
+    'card_user_reference': '22d2a86f-39ac-49ab-807a-2e364c59adde'
+})
+
+card_printer(card)
+
+# Initiate CardUserService, CardUserService allow you to interact with cardUsers data
+
+card_user_service = CardUserService()
+
+# Show CardUser
+card_user = card_user_service.show_card_user(
+    'edca6bca-bcf4-4855-a4df-3eb8102cd840')
+
+print(card_user)
+
+# List CardUser
+
+card_users = card_user_service.list_card_user(page=3, per_page=5)
+
+for card_user in card_users:
+    card_user_printer(card_user)
+
+# Create CardUser
+card_user = card_user_service.create_card_user({
+    'address': 'rue 5 argentin',
+    'email': 'tuel@mail.com',
+    'first_name': 'tuel',
+    'last_name': 'tual',
+    'id_no': '123981231231232',
+    'phone': '778909878',
+    'id_image': 'https://paydunya.com/',
+    'selfie_image': 'https://paydunya.com/',
+    'back_id_image': 'https://paydunya.com/',
+})
+
+card_user_printer(card_user)
+
+
+# Initiate TransactionService, TransactionService allow you to interact with transaction data
+
+transaction_service = TransactionService()
+
+# Show Transaction
+transaction = transaction_service.show_transaction(
+    '714a2054-4364-4f03-b597-8cb405b4b24a')
+
+transaction_printer(transaction)
+
+# List Transactions
+transactions = transaction_service.list_transaction(page=3, per_page=1)
+
+for transaction in transactions:
+    transaction_printer(transaction)
+
+
+# Initiate DisputeService, DisputeService allow you to interact with dispute data
+dispute_service = DisputeService()
+
+# List Disputes
+disputes = dispute_service.list_dispute(page=1, per_page=1)
+
+for dispute in disputes:
+    dispute_printer(dispute)
 
 ```
 
-### Wallets 
-- To get wallets information, simply follow the instruction at the beginning of this sub-heading and instantiate a new `Wallets` class.
-    - The following functions are available:
-        - wallet_detail
-        - get_transaction
-        - list_transactions
+## Contributing
 
-### Webhook Authentication
-- The Bitnob SDK comes with a function that enables your business authenticate events sent to your webhook. It is advised to authenticate all requests sent to your endpoint to avoid fake transactions. 
-
-#### Usage
-```python
-    from fastapi import FastAPI
-    from bitnob import webhook_authenication
-
-    app = FastAPI()
-
-    @app.post("/webhook_endpoint/")
-    async def webhook_event_handler(event):
-        if webhook_authenication(event):
-            #Handle event
-            #return 200
-        else:
-            #do nothing or throw error
-```
-
-## Development  -->
-
-
-## Contributing 
-
-Bug reports and pull requests are welcome on GitHub at [https://github.com/ALAL-Community/alal-python](https://github.com/ALAL-Community/alal-python). This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the code of conduct. Simply create a new branch and raise a Pull Request, we would review and merge. 
+Bug reports and pull requests are welcome on GitHub at [https://github.com/ALAL-Community/alal-python](https://github.com/ALAL-Community/alal-python). This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the code of conduct. Simply create a new branch and raise a Pull Request, we would review and merge.
 
 ## License
 
