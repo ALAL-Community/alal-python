@@ -54,7 +54,6 @@ def card_printer(card):
     print(card.card_user_reference)
     print(card.status)
 
-
 def card_user_printer(card_user):
     print(card_user.address)
     print(card_user.created_at)
@@ -66,7 +65,6 @@ def card_user_printer(card_user):
     print(card_user.reference)
     print(card_user.status)
 
-
 def transaction_printer(transaction):
     print(transaction.amount)
     print(transaction.card_reference)
@@ -76,7 +74,6 @@ def transaction_printer(transaction):
     print(transaction.reference)
     print(transaction.status)
     print(transaction.slug)
-
 
 def dispute_printer(dispute):
     print(dispute.explanation)
@@ -118,7 +115,6 @@ for card in cards:
     card_printer(card)
 
 # Create Card
-
 card = card_service.create_card({
     'card_brand': 'visa',
     'card_type': 'virtual',
@@ -127,8 +123,8 @@ card = card_service.create_card({
 
 card_printer(card)
 
-# Initiate CardUserService, CardUserService allow you to interact with cardUsers data
 
+# Initiate CardUserService, CardUserService allow you to interact with cardUsers data
 card_user_service = CardUserService()
 
 # Show CardUser
@@ -138,7 +134,6 @@ card_user = card_user_service.show_card_user(
 print(card_user)
 
 # List CardUser
-
 card_users = card_user_service.list_card_user(page=3, per_page=5)
 
 for card_user in card_users:
@@ -161,7 +156,6 @@ card_user_printer(card_user)
 
 
 # Initiate TransactionService, TransactionService allow you to interact with transaction data
-
 transaction_service = TransactionService()
 
 # Show Transaction
